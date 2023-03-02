@@ -38,14 +38,27 @@ const displayPhones = phones => {
         `
         phonesContainer.appendChild(phoneDiv);
     });
+    loadSpinner(false);
 }
 
 
 document.getElementById('btn-search').addEventListener('click',function(){
+    loadSpinner(true);
     const searchField = document.getElementById('search-field');
     const searchText = searchField.value;
     loadPhone(searchText);
 })
 
 
-loadPhone("apple");
+const loadSpinner=(isSpinning)=>{
+    const spinnerId = document.getElementById('id-spinner');
+    if(isSpinning){
+        spinnerId.classList.remove('d-none');
+    }else{
+        spinnerId.classList.add('d-none');
+    }
+
+}
+
+
+// loadPhone();
