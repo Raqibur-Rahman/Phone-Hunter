@@ -7,7 +7,7 @@ const loadPhone = async (searchText,dataLimit) => {
 }
 
 const displayPhones = (phones,dataLimit) => {
-    console.log(phones);
+    // console.log(phones);
     const phonesContainer = document.getElementById('phone-container');
     phonesContainer.innerText="";
 
@@ -46,7 +46,9 @@ const displayPhones = (phones,dataLimit) => {
                         <div class="card-body">
                             <h5 class="card-title">${phone.phone_name}</h5>
                             <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque laudantium quod consequuntur repellat, fugiat ad.</p>
-                            <button  onclick="loadPhoneDetails('${phone.slug}')"class="btn btn-primary">Show Details</button>
+                            <button onclick="loadPhoneDetails('${phone.slug}')"class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#phoneModal">Show Details</button>
+
+            
                         </div>
                     </div>
         `
@@ -79,11 +81,6 @@ document.getElementById('search-field').addEventListener('keypress',function(e){
 
 
 
-
-
-
-
-
 const loadSpinner=(isSpinning)=>{
     const spinnerId = document.getElementById('id-spinner');
     if(isSpinning){
@@ -102,8 +99,28 @@ const loadPhoneDetails=async (id)=>{
     const url= `https://openapi.programming-hero.com/api/phone/${id}`;
     const res = await fetch(url);
     const data=await res.json();
-    console.log(data.data);
+    displayPhoneDetails (data.data);
 }
 
 
-// loadPhone();
+const displayPhoneDetails = (phone) =>
+{
+    console.log(phone);
+    const ModalTitle = document.getElementById('phoneModalLabel');
+    ModalTitle.innerText= phone.name;
+
+    const PhoneDetails = document.getElementById('phone-details');
+    PhoneDetails.innerHTML=`
+
+    <img src="${phone.image ? phone.image: 'No image found'}" alt="">
+
+    <p>Release Date : ${phone.releaseDate ? phone.releaseDate : "No Release Date Found" } </p>
+    
+    <p>Features : ${phone.mainFeatures.memory ? phone.mainFeatures.memory : "No Features Found" } </p>
+    
+    `
+}
+
+
+
+ loadPhone("Apple",10);
