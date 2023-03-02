@@ -1,18 +1,31 @@
-const loadPhone = async (searchText) => {
+const loadPhone = async (searchText,dataLimit) => {
     const url = `https://openapi.programming-hero.com/api/phones?search=${searchText}`;
     const res = await fetch(url);
     const data = await res.json();
-    displayPhones(data.data);
+    displayPhones(data.data,dataLimit);
 
 }
 
-const displayPhones = phones => {
+const displayPhones = (phones,dataLimit) => {
     console.log(phones);
     const phonesContainer = document.getElementById('phone-container');
     phonesContainer.innerText="";
 
     //display 10 phones in a page
-    phones=phones.slice(0,10);
+    const showAll = document.getElementById('show-all');
+    if(dataLimit && phones.length>9){
+        phones=phones.slice(0,9);
+       showAll.classList.remove('d-none');
+    }
+    else{
+        showAll.classList.add('d-none');
+    }
+
+
+    
+
+
+
 
     //display if no phone found
     const noPhone = document.getElementById('no-found-msg');
@@ -41,12 +54,16 @@ const displayPhones = phones => {
     loadSpinner(false);
 }
 
-
-document.getElementById('btn-search').addEventListener('click',function(){
+processSearch=(dataLimit)=>{
     loadSpinner(true);
     const searchField = document.getElementById('search-field');
     const searchText = searchField.value;
-    loadPhone(searchText);
+    loadPhone(searchText,dataLimit);
+}
+
+
+document.getElementById('btn-search').addEventListener('click',function(){
+    processSearch(10);
 })
 
 
@@ -59,6 +76,12 @@ const loadSpinner=(isSpinning)=>{
     }
 
 }
+
+document.getElementById('btn-show-all').addEventListener('click',function(){
+    processSearch();
+})
+
+
 
 
 // loadPhone();
